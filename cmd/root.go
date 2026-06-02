@@ -19,3 +19,7 @@ func Execute() {
 		os.Exit(1)
 	}
 }
+
+func init() {
+	rootCmd.PersistentFlags().Bool("verbose", false, "Print each file as it is processed")
+}
