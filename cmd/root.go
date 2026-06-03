@@ -33,6 +33,7 @@ func Execute() {
 func init() {
 	rootCmd.PersistentFlags().StringVar(&flagProject, "project", ".", "React project root")
 	rootCmd.PersistentFlags().StringVar(&flagAssetDir, "assets", "src/assets", "Image assets sub-directory")
+	rootCmd.PersistentFlags().StringSliceVar(&flagIgnore, "ignore", nil, "Extra directory names to ignore")
 	rootCmd.PersistentFlags().BoolVar(&flagVerbose, "verbose", false, "Log every file vole reads")
 }
 
