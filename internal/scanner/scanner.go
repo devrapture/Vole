@@ -12,7 +12,7 @@ type Options struct {
 	ProjectPath string
 	AssetsDir   string
 	IgnoreDirs  []string
-	verbose     bool
+	Verbose     bool
 }
 
 type Scanner struct {
@@ -133,8 +133,8 @@ func (s *Scanner) collectReferences(projectAbsPath, assetAbsPath string) (map[st
 		}
 
 		absPath := filepath.Join(projectAbsPath, path)
-		if s.opts.verbose {
-			fmt.Printf("vole reading: %/s\n", path)
+		if s.opts.Verbose {
+			fmt.Printf("vole reading: %s\n", path)
 		}
 
 		content, err := os.ReadFile(absPath)
