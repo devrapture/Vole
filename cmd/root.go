@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"strings"
 
+	"github.com/devrapture/vole/internal/cleaner"
 	"github.com/devrapture/vole/internal/scanner"
 	"github.com/spf13/cobra"
 )
@@ -14,6 +16,7 @@ var (
 	flagAssetDir string
 	flagIgnore   []string
 	flagVerbose  bool
+	flagNoPrompt bool
 )
 
 var rootCmd = &cobra.Command{
@@ -35,6 +38,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&flagAssetDir, "assets", "src/assets", "Image assets sub-directory")
 	rootCmd.PersistentFlags().StringSliceVar(&flagIgnore, "ignore", nil, "Extra directory names to ignore")
 	rootCmd.PersistentFlags().BoolVar(&flagVerbose, "verbose", false, "Log every file vole reads")
+	rootCmd.PersistentFlags().BoolVar(&flagNoPrompt, "yes", false, "Delete without prompt")
 }
 
 func runRoot(cmd *cobra.Command, args []string) error {
@@ -46,6 +50,31 @@ func runRoot(cmd *cobra.Command, args []string) error {
 	}
 
 	printReport(result)
+
+	if result.UnusedAssets == 0 {
+		return nil
+	}
+
+	doDelete, err := askDelete(result.UnusedList(), flagNoPrompt)
+	if err != nil {
+		return err
+	}
+
+	if !doDelete {
+		fmt.Println()
+		fmt.Println("  No files deleted.  Run  vole clean --yes  to skip this prompt.")
+		fmt.Println()
+		return nil
+	}
+
+	cleanResult, err := cleaner.Clean(result, cleaner.Options{
+		Verbose: flagVerbose,
+	})
+	if err != nil {
+		return err
+	}
+
+	printDeleteSummary(cleanResult)
 
 	return nil
 }
@@ -82,6 +111,32 @@ func printReport(result *scanner.ScanResult) {
 	fmt.Println()
 	for _, a := range result.UnusedList() {
 		fmt.Printf("    ✗  %s\n", a.RelPath)
+	}
+	fmt.Println()
+}
+
+func askDelete(unused []*scanner.ImageAsset, noPrompt bool) (bool, error) {
+	if noPrompt {
+		return true, nil
+	}
+	fmt.Printf("   Delete %d unused file(s)? [y/N]", len(unused))
+	reader := bufio.NewReader(os.Stdin)
+	answer, err := reader.ReadString('\n')
+	if err != nil {
+		return false, fmt.Errorf("reading answer: %w", err)
+	}
+
+	answer = strings.TrimSpace(strings.ToLower(answer))
+
+	return answer == "y" || answer == "yes", nil
+}
+
+func printDeleteSummary(cr *cleaner.Result) {
+	fmt.Println()
+	if len(cr.Errors) > 0 {
+		fmt.Printf("  ⚠  Finished with %d error(s) — check stderr.\n", len(cr.Errors))
+	} else {
+		fmt.Printf("  ✓  Deleted %d file(s).\n", len(cr.Deleted))
 	}
 	fmt.Println()
 }
