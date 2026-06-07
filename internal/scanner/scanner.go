@@ -86,16 +86,20 @@ func (s *Scanner) collectAssets(projectAbsPath, assetAbsPath string) ([]*ImageAs
 		}
 
 		absPath := filepath.Join(assetAbsPath, path)
-
+		info, err := d.Info()
+		if err != nil {
+			return fmt.Errorf("reading file info for %s: %w", absPath, err)
+		}
 		relPath, err := filepath.Rel(projectAbsPath, absPath)
 		if err != nil {
 			return fmt.Errorf("computing relative path for %s: %w", absPath, err)
 		}
 
 		imageAssets = append(imageAssets, &ImageAsset{
-			AbsPath:  absPath,
-			RelPath:  filepath.ToSlash(relPath),
-			Basename: strings.ToLower(filepath.Base(path)),
+			AbsPath:   absPath,
+			RelPath:   filepath.ToSlash(relPath),
+			Basename:  strings.ToLower(filepath.Base(path)),
+			SizeBytes: info.Size(),
 		})
 
 		return nil
