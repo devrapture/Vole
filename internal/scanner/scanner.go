@@ -10,7 +10,7 @@ import (
 
 type Options struct {
 	ProjectPath string
-	AssetsDir   string
+	AssetsDirs  []string
 	IgnoreDirs  []string
 	Verbose     bool
 }
@@ -34,23 +34,33 @@ func (s *Scanner) Scan() (*ScanResult, error) {
 		return nil, fmt.Errorf("project path does not exist: %s", projectAbsPath)
 	}
 
-	assetAbsPath := filepath.Join(projectAbsPath, s.opts.AssetsDir)
-	if _, err := os.Stat(assetAbsPath); err != nil {
-		return nil, fmt.Errorf("assets directory not found: %s\n set --assets to the correct sub-path", assetAbsPath)
+	var assetAbsPaths []string
+	var imageAssets []*ImageAsset
+
+	for _, assetsDir := range s.opts.AssetsDirs {
+		assetAbsPath := filepath.Join(projectAbsPath, assetsDir)
+
+		if _, err := os.Stat(assetAbsPath); err != nil {
+			return nil, fmt.Errorf("assets directory not found: %s\n set --assets or vole.yml correctly", assetAbsPath)
+		}
+
+		assets, err := s.collectAssets(projectAbsPath, assetAbsPath)
+		if err != nil {
+			return nil, fmt.Errorf("collecting assets from %s: %w", assetAbsPath, err)
+		}
+
+		assetAbsPaths = append(assetAbsPaths, assetAbsPath)
+		imageAssets = append(imageAssets, assets...)
 	}
 
-	imageAsset, err := s.collectAssets(projectAbsPath, assetAbsPath)
-	if err != nil {
-		return nil, fmt.Errorf("collecting assets: %w", err)
-	}
+	refs, err := s.collectReferences(projectAbsPath, assetAbsPaths)
 
-	refs, err := s.collectReferences(projectAbsPath, assetAbsPath)
 	if err != nil {
 		return nil, fmt.Errorf("collecting references: %w", err)
 	}
 
 	usedCount := 0
-	for _, a := range imageAsset {
+	for _, a := range imageAssets {
 		if refs[strings.ToLower(a.Basename)] {
 			a.Used = true
 			usedCount++
@@ -59,11 +69,11 @@ func (s *Scanner) Scan() (*ScanResult, error) {
 
 	return &ScanResult{
 		ProjectPath:  projectAbsPath,
-		AssetsDir:    assetAbsPath,
-		TotalAssets:  len(imageAsset),
+		AssetsDirs:   assetAbsPaths,
+		TotalAssets:  len(imageAssets),
 		UsedAssets:   usedCount,
-		UnusedAssets: (len(imageAsset) - usedCount),
-		Assets:       imageAsset,
+		UnusedAssets: (len(imageAssets) - usedCount),
+		Assets:       imageAssets,
 	}, nil
 }
 
@@ -110,7 +120,7 @@ func (s *Scanner) collectAssets(projectAbsPath, assetAbsPath string) ([]*ImageAs
 	return imageAssets, nil
 }
 
-func (s *Scanner) collectReferences(projectAbsPath, assetAbsPath string) (map[string]bool, error) {
+func (s *Scanner) collectReferences(projectAbsPath string, assetAbsPaths []string) (map[string]bool, error) {
 	refs := make(map[string]bool)
 	err := fs.WalkDir(os.DirFS(projectAbsPath), ".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
@@ -126,8 +136,10 @@ func (s *Scanner) collectReferences(projectAbsPath, assetAbsPath string) (map[st
 			}
 
 			absDir := filepath.Join(projectAbsPath, path)
-			if absDir == assetAbsPath {
-				return fs.SkipDir
+			for _, assetAbsPath := range assetAbsPaths {
+				if absDir == assetAbsPath {
+					return fs.SkipDir
+				}
 			}
 			return nil
 		}

@@ -10,7 +10,7 @@ type ImageAsset struct {
 
 type ScanResult struct {
 	ProjectPath  string        `json:"project_path"`
-	AssetsDir    string        `json:"assets_dir"`
+	AssetsDirs   []string      `json:"assets_dirs"`
 	TotalAssets  int           `json:"total_assets"`
 	UsedAssets   int           `json:"used_assets"`
 	UnusedAssets int           `json:"unused_assets"`

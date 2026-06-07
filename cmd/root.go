@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/devrapture/vole/internal/cleaner"
+	"github.com/devrapture/vole/internal/config"
 	"github.com/devrapture/vole/internal/scanner"
 	"github.com/spf13/cobra"
 )
@@ -42,7 +43,10 @@ func init() {
 }
 
 func runRoot(cmd *cobra.Command, args []string) error {
-	opts := scannerOpts()
+	opts, err := scannerOpts(cmd)
+	if err != nil {
+		return err
+	}
 
 	result, err := scanner.NewScanner(*opts).Scan()
 	if err != nil {
@@ -79,20 +83,34 @@ func runRoot(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func scannerOpts() *scanner.Options {
+func scannerOpts(cmd *cobra.Command) (*scanner.Options, error) {
+	cfg, err := config.Load(flagProject)
+	if err != nil {
+		return nil, err
+	}
+	assetsDirs := cfg.Assets
+
+	if len(assetsDirs) == 0 || cmd.Flags().Changed("assetsDir") {
+		assetsDirs = []string{}
+	}
+	ignoreDirs := cfg.Ignore
+
+	if cmd.Flags().Changed("ignore") {
+		ignoreDirs = flagIgnore
+	}
 	return &scanner.Options{
 		ProjectPath: flagProject,
-		AssetsDir:   flagAssetDir,
-		IgnoreDirs:  flagIgnore,
+		AssetsDirs:  assetsDirs,
+		IgnoreDirs:  ignoreDirs,
 		Verbose:     flagVerbose,
-	}
+	}, nil
 }
 
 func printReport(result *scanner.ScanResult) {
 	sep := strings.Repeat("─", 55)
 	fmt.Println(sep)
 	fmt.Printf("  %-28s %s\n", "Project", result.ProjectPath)
-	fmt.Printf("  %-28s %s\n", "Assets directory", result.AssetsDir)
+	fmt.Printf("  %-28s %s\n", "Assets directories", strings.Join(result.AssetsDirs, ", "))
 	fmt.Println(sep)
 	fmt.Printf("  %-28s %d\n", "Total assets", result.TotalAssets)
 	fmt.Printf("  %-28s %d\n", "Used", result.UsedAssets)

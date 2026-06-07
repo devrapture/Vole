@@ -32,7 +32,7 @@ func Clean(scanResult *scanner.ScanResult, opts Options) (*Result, error) {
 		}
 
 		if err := os.Remove(asset.AbsPath); err != nil {
-			msg := fmt.Sprintf("failed to delelte %s:%v", asset.RelPath, err)
+			msg := fmt.Sprintf("failed to delete %s:%v", asset.RelPath, err)
 			fmt.Fprintln(os.Stderr, "vole error"+msg)
 			result.Errors = append(result.Errors, msg)
 			continue
