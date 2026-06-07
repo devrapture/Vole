@@ -6,6 +6,13 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/fatih/color"
+)
+
+var (
+	verbStyle = color.New(color.FgCyan)
+	warnStyle = color.New(color.FgYellow)
 )
 
 type Options struct {
@@ -150,12 +157,12 @@ func (s *Scanner) collectReferences(projectAbsPath string, assetAbsPaths []strin
 
 		absPath := filepath.Join(projectAbsPath, path)
 		if s.opts.Verbose {
-			fmt.Printf("vole reading: %s\n", path)
+			fmt.Printf("%s %s\n", verbStyle.Sprint("vole reading:"), path)
 		}
 
 		content, err := os.ReadFile(absPath)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "vole warning: could not read %s: %v\n", path, err)
+			fmt.Fprintf(os.Stderr, "%s could not read %s: %v\n", warnStyle.Sprint("vole warning:"), path, err)
 			return nil
 		}
 

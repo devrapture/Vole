@@ -5,6 +5,13 @@ import (
 	"os"
 
 	"github.com/devrapture/vole/internal/scanner"
+	"github.com/fatih/color"
+)
+
+var (
+	dryStyle = color.New(color.FgCyan)
+	delStyle = color.New(color.FgGreen)
+	errStyle = color.New(color.FgRed, color.Bold)
 )
 
 type Result struct {
@@ -25,7 +32,7 @@ func Clean(scanResult *scanner.ScanResult, opts Options) (*Result, error) {
 	for _, asset := range scanResult.UnusedList() {
 		if opts.DryRun {
 			if opts.Verbose {
-				fmt.Printf("vole [dry-run] would delete: %s\n", asset.RelPath)
+				fmt.Println(dryStyle.Sprintf("vole [dry-run] would delete: %s", asset.RelPath))
 			}
 			result.Skipped = append(result.Skipped, asset.AbsPath)
 			continue
@@ -33,13 +40,13 @@ func Clean(scanResult *scanner.ScanResult, opts Options) (*Result, error) {
 
 		if err := os.Remove(asset.AbsPath); err != nil {
 			msg := fmt.Sprintf("failed to delete %s:%v", asset.RelPath, err)
-			fmt.Fprintln(os.Stderr, "vole error"+msg)
+			fmt.Fprintln(os.Stderr, errStyle.Sprint("vole error: ")+msg)
 			result.Errors = append(result.Errors, msg)
 			continue
 		}
 
 		if opts.Verbose {
-			fmt.Printf("vole deleted: %s\n", asset.RelPath)
+			fmt.Println(delStyle.Sprintf("vole deleted: %s", asset.RelPath))
 		}
 
 		result.SpaceSavedBytes += asset.SizeBytes
