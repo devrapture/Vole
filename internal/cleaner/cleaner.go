@@ -27,6 +27,7 @@ func Clean(scanResult *scanner.ScanResult, opts Options) (*Result, error) {
 				fmt.Printf("vole [dry-run] would delete: %s\n", asset.RelPath)
 			}
 			result.Skipped = append(result.Skipped, asset.AbsPath)
+			continue
 		}
 
 		if err := os.Remove(asset.AbsPath); err != nil {

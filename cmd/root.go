@@ -62,7 +62,7 @@ func runRoot(cmd *cobra.Command, args []string) error {
 
 	if !doDelete {
 		fmt.Println()
-		fmt.Println("  No files deleted.  Run  vole clean --yes  to skip this prompt.")
+		fmt.Println("  No files deleted.  Run  vole --yes  to skip this prompt.")
 		fmt.Println()
 		return nil
 	}
