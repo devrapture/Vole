@@ -10,7 +10,7 @@ import (
 )
 
 type Config struct {
-	Assets []string `yaml:"assets`
+	Assets []string `yaml:"assets"`
 	Ignore []string `yaml:"ignore"`
 }
 
@@ -26,7 +26,7 @@ func Load(projectPath string) (*Config, error) {
 
 	var cfg Config
 	if err := yaml.Unmarshal(content, &cfg); err != nil {
-		return nil, fmt.Errorf("parsing config file: %w")
+		return nil, fmt.Errorf("parsing config file: %w", err)
 	}
 	return &cfg, nil
 }
