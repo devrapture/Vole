@@ -1,10 +1,11 @@
 package scanner
 
 type ImageAsset struct {
-	AbsPath  string
-	RelPath  string
-	Basename string
-	Used     bool
+	AbsPath   string
+	RelPath   string
+	Basename  string
+	SizeBytes int64
+	Used      bool
 }
 
 type ScanResult struct {

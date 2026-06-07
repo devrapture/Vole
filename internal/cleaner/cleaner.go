@@ -8,9 +8,10 @@ import (
 )
 
 type Result struct {
-	Deleted []string
-	Skipped []string
-	Errors  []string
+	Deleted         []string
+	Skipped         []string
+	Errors          []string
+	SpaceSavedBytes int64
 }
 
 type Options struct {
@@ -41,6 +42,7 @@ func Clean(scanResult *scanner.ScanResult, opts Options) (*Result, error) {
 			fmt.Printf("vole deleted: %s\n", asset.RelPath)
 		}
 
+		result.SpaceSavedBytes += asset.SizeBytes
 		result.Deleted = append(result.Deleted, asset.AbsPath)
 	}
 
