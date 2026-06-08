@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - "v*"
 
 permissions:
   contents: write
@@ -23,12 +23,6 @@ jobs:
         uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff
         with:
           go-version: "1.26.3"
-
-      - name: Generate version
-        id: version
-        run: |
-          VERSION="v0.1.${{ github.run_number }}"
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Build binaries
         run: |
@@ -50,8 +44,8 @@ jobs:
       - name: Create GitHub release
         uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65
         with:
-          tag_name: ${{ steps.version.outputs.version }}
-          name: Vole Clean ${{ steps.version.outputs.version }}
+          tag_name: ${{ github.ref_name }}
+          name: Vole Clean ${{ github.ref_name }}
           files: |
             dist/vole-clean-darwin-arm64
             dist/vole-clean-darwin-amd64
