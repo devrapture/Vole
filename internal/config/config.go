@@ -15,12 +15,16 @@ type Config struct {
 }
 
 func Load(projectPath string) (*Config, error) {
-	configPath := filepath.Join(projectPath, "vole.yml")
+	configPath, err := findConfigPath(projectPath)
+	if err != nil {
+		return nil, err
+	}
+	if configPath == "" {
+		return &Config{}, nil
+	}
+
 	content, err := os.ReadFile(configPath)
 	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			return &Config{}, nil
-		}
 		return nil, fmt.Errorf("reading config file: %w", err)
 	}
 
@@ -29,4 +33,17 @@ func Load(projectPath string) (*Config, error) {
 		return nil, fmt.Errorf("parsing config file: %w", err)
 	}
 	return &cfg, nil
+}
+
+func findConfigPath(projectPath string) (string, error) {
+	for _, name := range []string{"vole.yml", "vole.yaml"} {
+		configPath := filepath.Join(projectPath, name)
+		if _, err := os.Stat(configPath); err == nil {
+			return configPath, nil
+		} else if !errors.Is(err, os.ErrNotExist) {
+			return "", fmt.Errorf("checking config file %s: %w", configPath, err)
+		}
+	}
+
+	return "", nil
 }

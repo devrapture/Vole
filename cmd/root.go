@@ -100,8 +100,8 @@ func scannerOpts(cmd *cobra.Command) (*scanner.Options, error) {
 	}
 	assetsDirs := cfg.Assets
 
-	if len(assetsDirs) == 0 || cmd.Flags().Changed("assetsDir") {
-		assetsDirs = []string{}
+	if len(assetsDirs) == 0 || cmd.Flags().Changed("assets") {
+		assetsDirs = []string{flagAssetDir}
 	}
 	ignoreDirs := cfg.Ignore
 
