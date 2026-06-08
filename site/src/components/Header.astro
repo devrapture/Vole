@@ -1,0 +1,112 @@
+---
+const REPO = "devrapture/Vole";
+---
+
+<header class="sticky top-0 z-50 border-b border-border bg-bg/80 backdrop-blur-md">
+  <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2 font-mono font-semibold text-text hover:text-accent transition-colors">
+      <span class="w-2.5 h-2.5 rounded-full bg-accent" />
+      vole-clean
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="/docs" class="text-sm text-muted hover:text-text transition-colors">Docs</a>
+      <a
+        href={`https://github.com/${REPO}`}
+        class="flex items-center gap-1.5 text-sm text-muted hover:text-text transition-colors"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        GitHub
+        <span class="inline-flex items-center gap-0.5 text-xs text-muted" id="nav-star-count">
+          ★ <span id="nav-star-number">0</span>
+        </span>
+      </a>
+      <a
+        href="https://www.npmjs.com/package/vole-clean"
+        class="text-sm text-muted hover:text-text transition-colors"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        npm
+      </a>
+    </div>
+
+    <!-- Install button -->
+    <a
+      href="/docs/installation"
+      class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-bg font-semibold text-sm hover:bg-emerald-400 transition-colors"
+    >
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      Install
+    </a>
+
+    <!-- Mobile hamburger -->
+    <button
+      id="menu-toggle"
+      class="md:hidden p-2 text-muted hover:text-text"
+      aria-label="Toggle menu"
+      type="button"
+    >
+      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        <path id="menu-icon-close" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" class="hidden"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-border bg-bg">
+    <div class="px-4 py-4 space-y-3">
+      <a href="/docs" class="block text-sm text-muted hover:text-text transition-colors">Docs</a>
+      <a href="https://github.com/devrapture/Vole" target="_blank" rel="noopener noreferrer" class="block text-sm text-muted hover:text-text transition-colors">GitHub</a>
+      <a href="https://www.npmjs.com/package/vole-clean" target="_blank" rel="noopener noreferrer" class="block text-sm text-muted hover:text-text transition-colors">npm</a>
+      <a href="/docs/installation" class="block text-sm font-semibold text-accent hover:text-emerald-400 transition-colors">Install</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Mobile menu toggle
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  const openIcon = document.getElementById("menu-icon-open");
+  const closeIcon = document.getElementById("menu-icon-close");
+
+  toggle?.addEventListener("click", () => {
+    menu?.classList.toggle("hidden");
+    openIcon?.classList.toggle("hidden");
+    closeIcon?.classList.toggle("hidden");
+  });
+
+  // Sync star count from GitHubStars component
+  const CACHE_KEY = "vole-github-stars";
+  const CACHE_TTL = 300_000;
+
+  function updateNavStars() {
+    const cached = sessionStorage.getItem(CACHE_KEY);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (Date.now() - parsed.timestamp < CACHE_TTL) {
+          const el = document.getElementById("nav-star-number");
+          if (el) el.textContent = parsed.data.stars;
+        }
+      } catch {}
+    }
+  }
+
+  updateNavStars();
+  window.addEventListener("storage", updateNavStars);
+
+  // Also listen for custom event from GitHubStars component
+  document.addEventListener("stars-updated", (e) => {
+    const el = document.getElementById("nav-star-number");
+    if (el) el.textContent = e.detail;
+  });
+</script>

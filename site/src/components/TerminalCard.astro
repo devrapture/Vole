@@ -1,0 +1,36 @@
+---
+export interface Props {
+  lines: string[];
+}
+
+const { lines } = Astro.props;
+---
+
+<div class="rounded-lg border border-border bg-surface overflow-hidden font-mono text-sm">
+  <div class="flex items-center gap-1.5 px-4 py-2.5 border-b border-border bg-[#0a0a0c]">
+    <span class="w-3 h-3 rounded-full bg-[#ff5f57]" />
+    <span class="w-3 h-3 rounded-full bg-[#febc2e]" />
+    <span class="w-3 h-3 rounded-full bg-[#28c840]" />
+    <span class="ml-2 text-xs text-muted">terminal</span>
+  </div>
+  <div class="p-4 space-y-1 overflow-x-auto">
+    {
+      lines.map((line, i) => (
+        <div class="whitespace-pre-wrap">
+          {line.startsWith("$") ? (
+            <>
+              <span class="text-accent">$ </span>
+              <span class="text-text">{line.slice(2)}</span>
+            </>
+          ) : line.startsWith("✓") ? (
+            <span class="text-accent">{line}</span>
+          ) : line.startsWith("⚠") ? (
+            <span class="text-warning">{line}</span>
+          ) : (
+            <span class="text-muted">{line}</span>
+          )}
+        </div>
+      ))
+    }
+  </div>
+</div>

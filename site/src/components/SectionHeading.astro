@@ -1,0 +1,30 @@
+---
+export interface Props {
+  label?: string;
+  title: string;
+  description?: string;
+  align?: "center" | "left";
+}
+
+const { label, title, description, align = "center" } = Astro.props;
+---
+
+<div class:list={["max-w-3xl", align === "center" && "mx-auto text-center"]}>
+  {
+    label && (
+      <span class="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-4">
+        {label}
+      </span>
+    )
+  }
+  <h2 class="text-3xl md:text-4xl font-bold text-text leading-tight">
+    {title}
+  </h2>
+  {
+    description && (
+      <p class="mt-4 text-lg text-muted leading-relaxed">
+        {description}
+      </p>
+    )
+  }
+</div>
