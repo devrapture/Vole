@@ -1,0 +1,67 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: "vole-clean — Usage"
+description: "Learn how to use vole-clean CLI to find and remove unused image assets."
+---
+
+# Usage
+
+vole-clean is designed to be simple to run with sensible defaults.
+
+## Basic usage
+
+```bash
+# Scan the current project (default: assets in ./public)
+vole-clean
+```
+
+This scans the current directory for image assets in `./public` and reports unused files.
+
+## Custom project and asset directories
+
+```bash
+# Scan a specific project and asset directory
+vole-clean --project /path/to/project --assets src/assets
+```
+
+## Multiple asset directories
+
+```bash
+# Scan multiple asset directories
+vole-clean --assets public --assets assets
+```
+
+## Skip the delete prompt
+
+```bash
+# Delete without confirmation
+vole-clean --yes
+```
+
+Use with caution. Always review the report before using `--yes`.
+
+## Verbose output
+
+```bash
+# Log every file being read and every deletion
+vole-clean --verbose
+```
+
+Useful for debugging or understanding what vole-clean is doing.
+
+## Ignore directories
+
+```bash
+# Ignore extra directories
+vole-clean --ignore custom_cache --ignore .cache
+```
+
+## CLI flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `--project` | `string` | `.` | Path to the React project root |
+| `--assets` | `string` | `public` | Image assets sub-directory (repeatable) |
+| `--ignore` | `stringSlice` | | Extra directory names to skip (repeatable) |
+| `--verbose` | `bool` | `false` | Log every file being read and every deletion |
+| `--yes` | `bool` | `false` | Delete without confirmation prompt |

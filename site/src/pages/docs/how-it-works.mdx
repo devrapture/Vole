@@ -1,0 +1,99 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: "vole-clean — How it works"
+description: "Learn how vole-clean collects image assets, detects references in source code, and safely removes unused files."
+---
+
+# How it works
+
+vole-clean follows a four-step process to find and remove unused image assets.
+
+## 1. Asset collection
+
+vole-clean walks each configured asset directory and collects every image file with a supported extension:
+
+- PNG
+- JPG / JPEG
+- GIF
+- SVG
+- WebP
+- ICO
+- AVIF
+
+## 2. Reference extraction
+
+vole-clean walks the project (skipping asset directories and ignored directories) and reads every source file, extracting image references using the following patterns:
+
+### ES module imports
+
+```ts
+import logo from "./assets/logo.png"
+import "./assets/banner.svg"
+```
+
+### CommonJS require
+
+```ts
+const img = require("./assets/photo.jpg")
+```
+
+### JSX img tags
+
+```jsx
+<img src="/images/avatar.svg" />
+```
+
+### CSS url()
+
+```css
+background: url("../assets/bg.webp")
+background: url(../icon.ico)
+```
+
+### Quoted strings
+
+```json
+"icon.gif"
+```
+
+HTTP and HTTPS URLs are automatically excluded:
+
+```ts
+// These will NOT be treated as local asset references
+const url = "https://cdn.example.com/image.png"
+```
+
+## 3. Reporting
+
+vole-clean compares the collected assets against the detected references and generates a report showing:
+
+- Total assets found
+- Number of assets in use
+- Number of unused assets
+- Estimated space savings
+- List of every unused file
+
+## 4. Safe deletion
+
+Before deleting anything, vole-clean asks for confirmation:
+
+```
+Delete unused assets? (y/N)
+```
+
+Use the `--yes` flag to skip the prompt and delete automatically.
+
+## Supported file types
+
+vole-clean scans the following file types for image references:
+
+- JavaScript (`.js`)
+- JSX (`.jsx`)
+- TypeScript (`.ts`)
+- TSX (`.tsx`)
+- CSS (`.css`)
+- SCSS (`.scss`)
+- Less (`.less`)
+- HTML (`.html`)
+- JSON (`.json`)
+- Markdown (`.md`)

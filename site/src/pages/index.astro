@@ -1,0 +1,368 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import TerminalCard from "../components/TerminalCard.astro";
+import FeatureCard from "../components/FeatureCard.astro";
+import CTA from "../components/CTA.astro";
+import GitHubStars from "../components/GitHubStars.astro";
+---
+
+<BaseLayout
+  pageTitle="vole-clean — Find and remove unused image assets"
+  pageDescription="vole-clean is a fast CLI tool that scans React, TypeScript, and modern frontend projects to find unused image assets and safely remove them."
+>
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-grid bg-[length:24px_24px] opacity-[0.03]" />
+    <div class="relative max-w-5xl mx-auto px-4 pt-20 pb-16 md:pt-28 md:pb-20">
+      <div class="text-center">
+        <span class="inline-block text-xs font-semibold tracking-widest uppercase text-accent mb-6">
+          Find and remove unused image assets
+        </span>
+        <h1 class="text-5xl md:text-7xl font-bold text-text leading-[1.05] tracking-tight">
+          Stop shipping<br />
+          <span class="text-gradient">unused images</span>.
+        </h1>
+        <p class="mt-6 text-lg md:text-xl text-muted max-w-2xl mx-auto leading-relaxed">
+          vole-clean scans React, TypeScript, and modern frontend projects to find image assets that are never referenced, so you can clean your project safely.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+          <a
+            href="/docs/installation"
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent text-bg font-semibold text-sm hover:bg-emerald-400 transition-colors"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            npm install -g vole-clean
+          </a>
+          <a
+            href="https://github.com/devrapture/Vole"
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-border text-text font-medium text-sm hover:bg-surface transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+      <!-- Terminal preview -->
+      <div class="mt-16 max-w-2xl mx-auto">
+        <TerminalCard
+          lines={[
+            "$ vole-clean",
+            "Scanning project...",
+            "✓ 2,847 assets found",
+            "✓ 2,691 assets in use",
+            "⚠ 156 unused assets",
+            "Potential savings: 284 MB",
+            "Delete unused assets? (y/N)",
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem -->
+  <section class="py-20 px-4 border-t border-border">
+    <div class="max-w-5xl mx-auto">
+      <SectionHeading
+        title="Your asset folder is probably lying to you."
+        description="Images pile up fast. Old logos, unused hero images, abandoned icons, and backup files remain in your repo long after the code stops referencing them."
+        align="center"
+      />
+      <div class="mt-12 max-w-lg mx-auto">
+        <div class="rounded-lg border border-border bg-surface p-6 font-mono text-sm">
+          <div class="text-muted mb-2">src/assets/</div>
+          <div class="space-y-1">
+            <div class="text-text">├── logo-final.png</div>
+            <div class="text-text">├── logo-final-v2.png</div>
+            <div class="text-text">├── logo-final-final.png</div>
+            <div class="text-text">├── hero-old.webp</div>
+            <div class="text-text">├── hero-new.webp</div>
+            <div class="text-text">├── banner-backup.jpg</div>
+            <div class="text-warning">└── unused-icon.svg</div>
+          </div>
+        </div>
+      </div>
+      <p class="mt-8 text-center text-lg text-accent font-medium">
+        vole-clean finds what your editor search misses.
+      </p>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-20 px-4 border-t border-border">
+    <div class="max-w-5xl mx-auto">
+      <SectionHeading
+        label="Features"
+        title="Built for developers who care about clean codebases"
+        align="center"
+      />
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <FeatureCard
+          icon="⚡"
+          title="Fast scanning"
+          description="Written in Go and designed to walk large projects quickly, scanning thousands of files in seconds."
+        />
+        <FeatureCard
+          icon="🛡️"
+          title="Safe by default"
+          description="Shows unused assets before deleting. Use --yes only when you want automatic cleanup."
+        />
+        <FeatureCard
+          icon="🧩"
+          title="Framework friendly"
+          description="Works with React, TypeScript, Next.js, Vite, Remix, Astro, and other frontend projects."
+        />
+        <FeatureCard
+          icon="📁"
+          title="Multiple asset directories"
+          description="Scan public, assets, src/images, or any custom asset folder with the --assets flag."
+        />
+        <FeatureCard
+          icon="⚙️"
+          title="Configurable"
+          description="Use vole.yml or CLI flags to control which asset directories to scan and folders to ignore."
+        />
+        <FeatureCard
+          icon="🖥️"
+          title="Cross-platform"
+          description="Available for macOS, Linux, and Windows through GitHub Releases and npm."
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="py-20 px-4 border-t border-border">
+    <div class="max-w-5xl mx-auto">
+      <SectionHeading
+        label="How it works"
+        title="Three steps to a cleaner project"
+        align="center"
+      />
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="rounded-lg border border-border bg-surface p-6 relative">
+          <span class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-accent text-bg font-bold text-sm flex items-center justify-center">1</span>
+          <h3 class="text-lg font-semibold text-text mt-2 mb-3">Collect assets</h3>
+          <p class="text-sm text-muted mb-4">Scans image files inside configured asset directories.</p>
+          <div class="text-xs text-muted font-mono">
+            PNG, JPG, JPEG, GIF,<br />SVG, WebP, ICO, AVIF
+          </div>
+        </div>
+        <div class="rounded-lg border border-border bg-surface p-6 relative">
+          <span class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-accent text-bg font-bold text-sm flex items-center justify-center">2</span>
+          <h3 class="text-lg font-semibold text-text mt-2 mb-3">Detect references</h3>
+          <p class="text-sm text-muted mb-4">Searches source files for imports, requires, and URL references.</p>
+          <div class="text-xs text-muted font-mono space-y-1">
+            <div>import logo from "./logo.png"</div>
+            <div>require("./assets/photo.jpg")</div>
+            <div>&lt;img src="/images/avatar.svg" /&gt;</div>
+            <div>url("../assets/bg.webp")</div>
+          </div>
+        </div>
+        <div class="rounded-lg border border-border bg-surface p-6 relative">
+          <span class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-accent text-bg font-bold text-sm flex items-center justify-center">3</span>
+          <h3 class="text-lg font-semibold text-text mt-2 mb-3">Clean safely</h3>
+          <p class="text-sm text-muted mb-4">Reports unused files and asks before deleting them.</p>
+          <div class="text-sm font-mono pt-2 border-t border-border">
+            <span class="text-warning">Delete unused assets? (y/N)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Install options -->
+  <section class="py-20 px-4 border-t border-border">
+    <div class="max-w-4xl mx-auto">
+      <SectionHeading
+        label="Installation"
+        title="Get started in seconds"
+        align="center"
+      />
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="install-card rounded-lg border border-border bg-surface overflow-hidden relative group">
+          <div class="px-4 py-2.5 border-b border-border bg-[#0a0a0c] flex items-center justify-between">
+            <span class="text-xs font-mono text-muted">npm</span>
+          </div>
+          <div class="p-4 font-mono text-sm text-text flex items-center justify-between gap-4" data-code="npm install -g vole-clean">
+            <code class="text-text whitespace-nowrap">npm install -g vole-clean</code>
+            <button type="button" class="copy-btn shrink-0 w-7 h-7 rounded border border-border bg-[#0a0a0c] flex items-center justify-center text-muted hover:text-text hover:border-accent/40 transition-colors" aria-label="Copy to clipboard">
+              <svg class="w-3.5 h-3.5 copy-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <svg class="w-3.5 h-3.5 check-icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="install-card rounded-lg border border-border bg-surface overflow-hidden relative group">
+          <div class="px-4 py-2.5 border-b border-border bg-[#0a0a0c] flex items-center justify-between">
+            <span class="text-xs font-mono text-muted">npx</span>
+          </div>
+          <div class="p-4 font-mono text-sm text-text flex items-center justify-between gap-4" data-code="npx vole-clean">
+            <code class="text-text whitespace-nowrap">npx vole-clean</code>
+            <button type="button" class="copy-btn shrink-0 w-7 h-7 rounded border border-border bg-[#0a0a0c] flex items-center justify-center text-muted hover:text-text hover:border-accent/40 transition-colors" aria-label="Copy to clipboard">
+              <svg class="w-3.5 h-3.5 copy-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <svg class="w-3.5 h-3.5 check-icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="install-card rounded-lg border border-border bg-surface overflow-hidden relative group">
+          <div class="px-4 py-2.5 border-b border-border bg-[#0a0a0c] flex items-center justify-between">
+            <span class="text-xs font-mono text-muted">Go</span>
+          </div>
+          <div class="p-4 font-mono text-sm text-text flex items-center justify-between gap-4" data-code="go install github.com/devrapture/vole@latest">
+            <code class="text-text whitespace-nowrap">go install github.com/devrapture/vole@latest</code>
+            <button type="button" class="copy-btn shrink-0 w-7 h-7 rounded border border-border bg-[#0a0a0c] flex items-center justify-center text-muted hover:text-text hover:border-accent/40 transition-colors" aria-label="Copy to clipboard">
+              <svg class="w-3.5 h-3.5 copy-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <svg class="w-3.5 h-3.5 check-icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="install-card rounded-lg border border-border bg-surface overflow-hidden relative group">
+          <div class="px-4 py-2.5 border-b border-border bg-[#0a0a0c] flex items-center justify-between">
+            <span class="text-xs font-mono text-muted">macOS / Linux</span>
+          </div>
+          <div class="p-4 font-mono text-sm text-text flex items-center justify-between gap-4" data-code="curl -fsSL https://raw.githubusercontent.com/devrapture/Vole/main/install.sh | bash">
+            <code class="text-text text-xs sm:text-sm break-all">curl -fsSL https://raw.githubusercontent.com/devrapture/Vole/main/install.sh | bash</code>
+            <button type="button" class="copy-btn shrink-0 w-7 h-7 rounded border border-border bg-[#0a0a0c] flex items-center justify-center text-muted hover:text-text hover:border-accent/40 transition-colors" aria-label="Copy to clipboard">
+              <svg class="w-3.5 h-3.5 copy-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <svg class="w-3.5 h-3.5 check-icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.querySelectorAll(".copy-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const container = btn.closest("[data-code]");
+        const code = container?.getAttribute("data-code");
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code);
+          const icon = btn.querySelector(".copy-icon");
+          const check = btn.querySelector(".check-icon");
+          icon?.classList.add("hidden");
+          check?.classList.remove("hidden");
+          btn.classList.add("border-accent", "text-accent");
+
+          setTimeout(() => {
+            icon?.classList.remove("hidden");
+            check?.classList.add("hidden");
+            btn.classList.remove("border-accent", "text-accent");
+          }, 2000);
+        } catch {
+          // Fallback for older browsers
+          const textarea = document.createElement("textarea");
+          textarea.value = code;
+          textarea.style.position = "fixed";
+          textarea.style.opacity = "0";
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+        }
+      });
+    });
+  </script>
+
+  <!-- Configuration -->
+  <section class="py-20 px-4 border-t border-border">
+    <div class="max-w-4xl mx-auto">
+      <SectionHeading
+        title="Configuration that grows with your project"
+        description="Works out of the box, but gives you control when your project needs it."
+        align="center"
+      />
+      <div class="mt-12 max-w-xl mx-auto">
+        <div class="rounded-lg border border-border bg-surface overflow-hidden">
+          <div class="px-4 py-2.5 border-b border-border bg-[#0a0a0c] flex items-center justify-between">
+            <span class="text-xs font-mono text-muted">vole.yml</span>
+            <span class="text-xs text-muted">YAML</span>
+          </div>
+          <div class="p-4 font-mono text-sm text-text leading-relaxed">
+            <span class="text-[#bd93f9]">assets</span>:<br />
+            <span class="text-muted">  -</span> public<br />
+            <span class="text-muted">  -</span> assets<br />
+            <span class="text-muted">  -</span> src/images<br />
+            <span class="text-[#bd93f9]">ignore</span>:<br />
+            <span class="text-muted">  -</span> cypress<br />
+            <span class="text-muted">  -</span> .cache<br />
+            <span class="text-muted">  -</span> storybook-static
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLI Flags -->
+  <section class="py-20 px-4 border-t border-border">
+    <div class="max-w-4xl mx-auto">
+      <SectionHeading
+        label="CLI"
+        title="Flags reference"
+        align="center"
+      />
+      <div class="mt-12 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-3 px-4 font-semibold text-text">Flag</th>
+              <th class="text-left py-3 px-4 font-semibold text-text">Type</th>
+              <th class="text-left py-3 px-4 font-semibold text-text">Default</th>
+              <th class="text-left py-3 px-4 font-semibold text-text">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-3 px-4 font-mono text-xs text-accent">--project</td>
+              <td class="py-3 px-4 text-muted">string</td>
+              <td class="py-3 px-4 text-muted">.</td>
+              <td class="py-3 px-4 text-muted">Path to the React project root</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-3 px-4 font-mono text-xs text-accent">--assets</td>
+              <td class="py-3 px-4 text-muted">string</td>
+              <td class="py-3 px-4 text-muted">public</td>
+              <td class="py-3 px-4 text-muted">Image assets sub-directory (repeatable)</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-3 px-4 font-mono text-xs text-accent">--ignore</td>
+              <td class="py-3 px-4 text-muted">stringSlice</td>
+              <td class="py-3 px-4 text-muted"></td>
+              <td class="py-3 px-4 text-muted">Extra directory names to skip (repeatable)</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-3 px-4 font-mono text-xs text-accent">--verbose</td>
+              <td class="py-3 px-4 text-muted">bool</td>
+              <td class="py-3 px-4 text-muted">false</td>
+              <td class="py-3 px-4 text-muted">Log every file being read and every deletion</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-3 px-4 font-mono text-xs text-accent">--yes</td>
+              <td class="py-3 px-4 text-muted">bool</td>
+              <td class="py-3 px-4 text-muted">false</td>
+              <td class="py-3 px-4 text-muted">Delete without confirmation prompt</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- GitHub Stars -->
+  <GitHubStars />
+
+  <!-- Final CTA -->
+  <CTA
+    heading="Clean your asset folder in under 30 seconds."
+    ctaText="npm install -g vole-clean"
+    ctaHref="/docs/installation"
+    secondaryText="Read the docs"
+    secondaryHref="/docs"
+  />
+</BaseLayout>
