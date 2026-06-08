@@ -1,4 +1,4 @@
-ARTIFACT_NAME := vole
+ARTIFACT_NAME := vole-clean
 
 build:
 	@go build -o bin/${ARTIFACT_NAME} main.go

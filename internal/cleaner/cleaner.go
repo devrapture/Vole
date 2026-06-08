@@ -32,7 +32,7 @@ func Clean(scanResult *scanner.ScanResult, opts Options) (*Result, error) {
 	for _, asset := range scanResult.UnusedList() {
 		if opts.DryRun {
 			if opts.Verbose {
-				fmt.Println(dryStyle.Sprintf("vole [dry-run] would delete: %s", asset.RelPath))
+				fmt.Println(dryStyle.Sprintf("vole-clean [dry-run] would delete: %s", asset.RelPath))
 			}
 			result.Skipped = append(result.Skipped, asset.AbsPath)
 			continue

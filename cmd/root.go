@@ -31,9 +31,9 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "vole",
+	Use:   "vole-clean",
 	Short: "Find and remove unused image assets in a React project",
-	Long:  "vole is a developer tool that scans your React/TypeScript project, identifies image files inside a chosen assets directory that are never referenced in your source code, and lets you delete them safely",
+	Long:  "vole-clean is a developer tool that scans your React/TypeScript project, identifies image files inside a chosen assets directory that are never referenced in your source code, and lets you delete them safely",
 	RunE:  runRoot,
 }
 
