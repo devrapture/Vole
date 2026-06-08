@@ -1,0 +1,22 @@
+{
+	"name": "vole-clean",
+	"version": "0.1.0",
+	"description": "Find and remove unused image assets in React projects",
+	"license": "MIT",
+	"bin": {
+		"vole-clean": "./npm/vole-clean.js"
+	},
+	"scripts": {
+		"build:npm": "bash scripts/build-npm-binaries.sh",
+		"prepack": "npm run build:npm"
+	},
+	"files": [
+		"npm",
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
+	"engines": {
+		"node": ">=16"
+	}
+}
