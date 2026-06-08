@@ -1,0 +1,64 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: "vole-clean — Installation"
+description: "Install vole-clean via npm, npx, Go, curl, or build from source."
+---
+
+# Installation
+
+Choose the method that works best for your setup.
+
+## npm (global)
+
+```bash
+npm install -g vole-clean
+```
+
+After installation, run `vole-clean` from any project directory.
+
+## npx (run without installing)
+
+```bash
+npx vole-clean
+```
+
+This downloads and runs the latest version without a global install.
+
+## Go
+
+```bash
+go install github.com/devrapture/vole@latest
+```
+
+Ensure your `$GOPATH/bin` is in your `$PATH`.
+
+## macOS & Linux (curl)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/devrapture/Vole/main/install.sh | bash
+```
+
+The install script downloads the correct binary for your platform and places it in `/usr/local/bin`.
+
+## Binary download
+
+Download the latest binary for your platform from the [GitHub Releases](https://github.com/devrapture/vole/releases) page.
+
+| Platform | Architecture | Binary |
+|----------|-------------|--------|
+| macOS | arm64 | `vole-clean-darwin-arm64` |
+| macOS | amd64 | `vole-clean-darwin-amd64` |
+| Linux | arm64 | `vole-clean-linux-arm64` |
+| Linux | amd64 | `vole-clean-linux-amd64` |
+| Windows | amd64 | `vole-clean-windows-amd64.exe` |
+
+## Build from source
+
+```bash
+git clone https://github.com/devrapture/vole.git
+cd vole
+make build
+./bin/vole-clean
+```
+
+Requires Go 1.21 or later.

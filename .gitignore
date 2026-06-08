@@ -24,5 +24,10 @@ go.work.sum
 .env
 .env.local
 
+# Site / Astro website
+site/node_modules/
+site/dist/
+site/.astro/
+
 # Release artifacts
 /dist/

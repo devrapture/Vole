@@ -1,0 +1,58 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: "vole-clean — Configuration"
+description: "Configure vole-clean with vole.yml or vole.yaml for custom asset directories and ignore patterns."
+---
+
+# Configuration
+
+vole-clean looks for a `vole.yml` (preferred) or `vole.yaml` in the project root. CLI flags override values from the config file.
+
+## Example
+
+```yaml
+# vole.yml — place in your project root
+
+# Directories to scan for image assets.
+# Overrides the --assets flag when set.
+assets:
+  - public
+  - assets
+  - src/images
+
+# Extra directory names to skip during scanning.
+# These are appended to the built-in ignore list
+# (node_modules, dist, build, .git, coverage, .next, out).
+ignore:
+  - cypress
+  - .cache
+  - storybook-static
+```
+
+## Field reference
+
+| Field | Type | CLI equivalent | Description |
+|-------|------|----------------|-------------|
+| `assets` | `[]string` | `--assets` | Asset directories to scan for images |
+| `ignore` | `[]string` | `--ignore` | Extra directory names to skip |
+
+## Priority
+
+CLI flags take precedence over the config file. For example:
+
+```bash
+# This overrides any assets defined in vole.yml
+vole-clean --assets custom_assets
+```
+
+## Built-in ignore list
+
+These directories are always ignored:
+
+- `node_modules`
+- `dist`
+- `build`
+- `.git`
+- `coverage`
+- `.next`
+- `out`

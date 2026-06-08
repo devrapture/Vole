@@ -21,15 +21,25 @@ that are never referenced in source code, and lets you safely delete them.
 
 ## Installation
 
+### Quick install (macOS & Linux)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/devrapture/Vole/main/install.sh | bash
+```
+
 ### Go install
 
 ```bash
 go install github.com/devrapture/vole@latest
 ```
 
-### npm (global)
+### npm
 
 ```bash
+# Run directly without installing
+npx vole-clean
+
+# Or install globally
 npm install -g vole-clean
 ```
 

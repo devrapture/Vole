@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-text font-sans antialiased;
+  }
+
+  ::selection {
+    background-color: rgba(34, 197, 94, 0.3);
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-bg;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-bg;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted;
+  }
+}
+
+@layer components {
+  .text-gradient {
+    @apply bg-gradient-to-r from-accent to-emerald-400 bg-clip-text text-transparent;
+  }
+
+  .glow-green {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.15),
+                0 0 40px rgba(34, 197, 94, 0.05);
+  }
+}
