@@ -1,3 +1,5 @@
+<img width="371" height="114" alt="image" src="https://github.com/user-attachments/assets/e31d407f-e4fe-4276-b9ae-7a01048ebe8c" />
+
 # vole-clean
 
 **Find and remove unused image assets in React/TypeScript projects.**
