@@ -60,6 +60,9 @@ func (s *Scanner) Scan() (*ScanResult, error) {
 		imageAssets = append(imageAssets, assets...)
 	}
 
+	assetAbsPaths = dedupStrings(assetAbsPaths)
+	imageAssets = dedupAssets(imageAssets)
+
 	refs, err := s.collectReferences(projectAbsPath, assetAbsPaths)
 
 	if err != nil {
@@ -82,6 +85,33 @@ func (s *Scanner) Scan() (*ScanResult, error) {
 		UnusedAssets: (len(imageAssets) - usedCount),
 		Assets:       imageAssets,
 	}, nil
+}
+
+func dedupStrings(paths []string) []string {
+	seen := make(map[string]bool, len(paths))
+	result := make([]string, 0, len(paths))
+	for _, p := range paths {
+		c := filepath.Clean(p)
+		if seen[c] {
+			continue
+		}
+		seen[c] = true
+		result = append(result, p)
+	}
+	return result
+}
+
+func dedupAssets(assets []*ImageAsset) []*ImageAsset {
+	seen := make(map[string]bool, len(assets))
+	result := make([]*ImageAsset, 0, len(assets))
+	for _, a := range assets {
+		if seen[a.AbsPath] {
+			continue
+		}
+		seen[a.AbsPath] = true
+		result = append(result, a)
+	}
+	return result
 }
 
 // collectAssets walks the assets directory and returns every image file found.
