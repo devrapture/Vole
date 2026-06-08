@@ -7,7 +7,9 @@ import (
 	"strings"
 
 	"github.com/devrapture/vole/internal/cleaner"
+	"github.com/devrapture/vole/internal/config"
 	"github.com/devrapture/vole/internal/scanner"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -17,6 +19,15 @@ var (
 	flagIgnore   []string
 	flagVerbose  bool
 	flagNoPrompt bool
+
+	sepStyle    = color.New(color.Bold, color.FgCyan)
+	labelStyle  = color.New(color.Faint)
+	usedStyle   = color.New(color.FgGreen, color.Bold)
+	unusedStyle = color.New(color.FgRed, color.Bold)
+	okStyle     = color.New(color.FgGreen)
+	warnStyle   = color.New(color.FgYellow)
+	errStyle    = color.New(color.FgRed, color.Bold)
+	headerStyle = color.New(color.Bold)
 )
 
 var rootCmd = &cobra.Command{
@@ -42,7 +53,10 @@ func init() {
 }
 
 func runRoot(cmd *cobra.Command, args []string) error {
-	opts := scannerOpts()
+	opts, err := scannerOpts(cmd)
+	if err != nil {
+		return err
+	}
 
 	result, err := scanner.NewScanner(*opts).Scan()
 	if err != nil {
@@ -62,7 +76,7 @@ func runRoot(cmd *cobra.Command, args []string) error {
 
 	if !doDelete {
 		fmt.Println()
-		fmt.Println("  No files deleted.  Run  vole --yes  to skip this prompt.")
+		fmt.Println("  " + labelStyle.Sprint("No files deleted.") + "  Run  vole --yes  to skip this prompt.")
 		fmt.Println()
 		return nil
 	}
@@ -79,38 +93,52 @@ func runRoot(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func scannerOpts() *scanner.Options {
+func scannerOpts(cmd *cobra.Command) (*scanner.Options, error) {
+	cfg, err := config.Load(flagProject)
+	if err != nil {
+		return nil, err
+	}
+	assetsDirs := cfg.Assets
+
+	if len(assetsDirs) == 0 || cmd.Flags().Changed("assets") {
+		assetsDirs = []string{flagAssetDir}
+	}
+	ignoreDirs := cfg.Ignore
+
+	if cmd.Flags().Changed("ignore") {
+		ignoreDirs = flagIgnore
+	}
 	return &scanner.Options{
 		ProjectPath: flagProject,
-		AssetsDir:   flagAssetDir,
-		IgnoreDirs:  flagIgnore,
+		AssetsDirs:  assetsDirs,
+		IgnoreDirs:  ignoreDirs,
 		Verbose:     flagVerbose,
-	}
+	}, nil
 }
 
 func printReport(result *scanner.ScanResult) {
-	sep := strings.Repeat("─", 55)
+	sep := sepStyle.Sprint(strings.Repeat("─", 55))
 	fmt.Println(sep)
-	fmt.Printf("  %-28s %s\n", "Project", result.ProjectPath)
-	fmt.Printf("  %-28s %s\n", "Assets directory", result.AssetsDir)
+	fmt.Printf("  %s %s\n", labelStyle.Sprintf("%-28s", "Project"), color.New(color.Bold).Sprint(result.ProjectPath))
+	fmt.Printf("  %s %s\n", labelStyle.Sprintf("%-28s", "Assets directories"), strings.Join(result.AssetsDirs, ", "))
 	fmt.Println(sep)
-	fmt.Printf("  %-28s %d\n", "Total assets", result.TotalAssets)
-	fmt.Printf("  %-28s %d\n", "Used", result.UsedAssets)
-	fmt.Printf("  %-28s %d\n", "Unused", result.UnusedAssets)
+	fmt.Printf("  %s %s\n", labelStyle.Sprintf("%-28s", "Total assets"), color.New(color.Bold).Sprintf("%d", result.TotalAssets))
+	fmt.Printf("  %s %s\n", labelStyle.Sprintf("%-28s", "Used"), usedStyle.Sprintf("%d", result.UsedAssets))
+	fmt.Printf("  %s %s\n", labelStyle.Sprintf("%-28s", "Unused"), unusedStyle.Sprintf("%d", result.UnusedAssets))
 	fmt.Println(sep)
 
 	if result.UnusedAssets == 0 {
 		fmt.Println()
-		fmt.Println("  ✓  No unused assets — your project is clean!")
+		fmt.Println("  " + okStyle.Sprint("✓") + "  No unused assets — your project is clean!")
 		fmt.Println()
 		return
 	}
 
 	fmt.Println()
-	fmt.Println("  Unused assets:")
+	fmt.Println("  " + headerStyle.Sprint("Unused assets:"))
 	fmt.Println()
 	for _, a := range result.UnusedList() {
-		fmt.Printf("    ✗  %s\n", a.RelPath)
+		fmt.Printf("    %s  %s\n", errStyle.Sprint("✗"), a.RelPath)
 	}
 	fmt.Println()
 }
@@ -134,10 +162,10 @@ func askDelete(unused []*scanner.ImageAsset, noPrompt bool) (bool, error) {
 func printDeleteSummary(cr *cleaner.Result) {
 	fmt.Println()
 	if len(cr.Errors) > 0 {
-		fmt.Printf("  ⚠  Finished with %d error(s) — check stderr.\n", len(cr.Errors))
+		fmt.Printf("  %s  %s\n", warnStyle.Sprint("⚠"), warnStyle.Sprintf("Finished with %d error(s) — check stderr.", len(cr.Errors)))
 	} else {
-		fmt.Printf("  ✓  Deleted %d file(s).\n", len(cr.Deleted))
-		fmt.Printf("  ✓ Space saved: %s\n", formatBytes(cr.SpaceSavedBytes))
+		fmt.Printf("  %s  %s\n", okStyle.Sprint("✓"), okStyle.Sprintf("Deleted %d file(s).", len(cr.Deleted)))
+		fmt.Printf("  %s %s\n", okStyle.Sprint("✓"), okStyle.Sprintf("Space saved: %s", formatBytes(cr.SpaceSavedBytes)))
 	}
 	fmt.Println()
 }
