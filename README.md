@@ -1,3 +1,5 @@
+<img width="371" height="114" alt="image" src="https://github.com/user-attachments/assets/e31d407f-e4fe-4276-b9ae-7a01048ebe8c" />
+
 # vole-clean
 
 **Find and remove unused image assets in React/TypeScript projects.**
@@ -19,15 +21,25 @@ that are never referenced in source code, and lets you safely delete them.
 
 ## Installation
 
+### Quick install (macOS & Linux)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/devrapture/Vole/main/install.sh | bash
+```
+
 ### Go install
 
 ```bash
 go install github.com/devrapture/vole@latest
 ```
 
-### npm (global)
+### npm
 
 ```bash
+# Run directly without installing
+npx vole-clean
+
+# Or install globally
 npm install -g vole-clean
 ```
 
