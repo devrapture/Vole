@@ -5,3 +5,9 @@ build:
 
 run:
 	@go run main.go
+
+test:
+	@go test ./...
+
+test-verbose:
+	@go test -v -count=1 ./...
