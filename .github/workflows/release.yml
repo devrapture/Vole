@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff
+        with:
+          go-version: "1.26.3"
+
+      - name: Generate version
+        id: version
+        run: |
+          VERSION="v0.1.${{ github.run_number }}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Build binaries
+        run: |
+          mkdir -p dist
+
+          GOOS=darwin GOARCH=arm64 go build -o dist/vole-clean-darwin-arm64 main.go
+          GOOS=darwin GOARCH=amd64 go build -o dist/vole-clean-darwin-amd64 main.go
+
+          GOOS=linux GOARCH=arm64 go build -o dist/vole-clean-linux-arm64 main.go
+          GOOS=linux GOARCH=amd64 go build -o dist/vole-clean-linux-amd64 main.go
+
+          GOOS=windows GOARCH=amd64 go build -o dist/vole-clean-windows-amd64.exe main.go
+
+      - name: Create checksums
+        run: |
+          cd dist
+          sha256sum * > vole-clean-checksums.txt
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: Vole Clean ${{ steps.version.outputs.version }}
+          files: |
+            dist/vole-clean-darwin-arm64
+            dist/vole-clean-darwin-amd64
+            dist/vole-clean-linux-arm64
+            dist/vole-clean-linux-amd64
+            dist/vole-clean-windows-amd64.exe
+            dist/vole-clean-checksums.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

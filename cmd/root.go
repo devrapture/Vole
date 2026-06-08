@@ -13,6 +13,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const CLIName = "vole-clean"
+
 var (
 	flagProject  string
 	flagAssetDir string
@@ -31,9 +33,9 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "vole",
+	Use:   "vole-clean",
 	Short: "Find and remove unused image assets in a React project",
-	Long:  "vole is a developer tool that scans your React/TypeScript project, identifies image files inside a chosen assets directory that are never referenced in your source code, and lets you delete them safely",
+	Long:  "vole-clean is a developer tool that scans your React/TypeScript project, identifies image files inside a chosen assets directory that are never referenced in your source code, and lets you delete them safely",
 	RunE:  runRoot,
 }
 
@@ -46,9 +48,9 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&flagProject, "project", ".", "React project root")
-	rootCmd.PersistentFlags().StringVar(&flagAssetDir, "assets", "src/assets", "Image assets sub-directory")
+	rootCmd.PersistentFlags().StringVar(&flagAssetDir, "assets", "public", "Image assets sub-directory")
 	rootCmd.PersistentFlags().StringSliceVar(&flagIgnore, "ignore", nil, "Extra directory names to ignore")
-	rootCmd.PersistentFlags().BoolVar(&flagVerbose, "verbose", false, "Log every file vole reads")
+	rootCmd.PersistentFlags().BoolVar(&flagVerbose, "verbose", false, "Log every file vole-clean reads")
 	rootCmd.PersistentFlags().BoolVar(&flagNoPrompt, "yes", false, "Delete without prompt")
 }
 
@@ -76,7 +78,7 @@ func runRoot(cmd *cobra.Command, args []string) error {
 
 	if !doDelete {
 		fmt.Println()
-		fmt.Println("  " + labelStyle.Sprint("No files deleted.") + "  Run  vole --yes  to skip this prompt.")
+		fmt.Println("  " + labelStyle.Sprint("No files deleted.") + "  Run  " + CLIName + " --yes  to skip this prompt.")
 		fmt.Println()
 		return nil
 	}
@@ -113,6 +115,7 @@ func scannerOpts(cmd *cobra.Command) (*scanner.Options, error) {
 		AssetsDirs:  assetsDirs,
 		IgnoreDirs:  ignoreDirs,
 		Verbose:     flagVerbose,
+		CLIName:     CLIName,
 	}, nil
 }
 
