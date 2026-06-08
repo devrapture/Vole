@@ -13,6 +13,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const CLIName = "vole-clean"
+
 var (
 	flagProject  string
 	flagAssetDir string
@@ -76,7 +78,7 @@ func runRoot(cmd *cobra.Command, args []string) error {
 
 	if !doDelete {
 		fmt.Println()
-		fmt.Println("  " + labelStyle.Sprint("No files deleted.") + "  Run  vole --yes  to skip this prompt.")
+		fmt.Println("  " + labelStyle.Sprint("No files deleted.") + "  Run  " + CLIName + " --yes  to skip this prompt.")
 		fmt.Println()
 		return nil
 	}
@@ -113,6 +115,7 @@ func scannerOpts(cmd *cobra.Command) (*scanner.Options, error) {
 		AssetsDirs:  assetsDirs,
 		IgnoreDirs:  ignoreDirs,
 		Verbose:     flagVerbose,
+		CLIName:     CLIName,
 	}, nil
 }
 

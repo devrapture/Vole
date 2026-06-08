@@ -20,6 +20,7 @@ type Options struct {
 	AssetsDirs  []string
 	IgnoreDirs  []string
 	Verbose     bool
+	CLIName     string
 }
 
 type Scanner struct {
@@ -187,12 +188,12 @@ func (s *Scanner) collectReferences(projectAbsPath string, assetAbsPaths []strin
 
 		absPath := filepath.Join(projectAbsPath, path)
 		if s.opts.Verbose {
-			fmt.Printf("%s %s\n", verbStyle.Sprint("vole reading:"), path)
+			fmt.Printf("%s %s\n", verbStyle.Sprint(s.opts.CLIName+" reading:"), path)
 		}
 
 		content, err := os.ReadFile(absPath)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s could not read %s: %v\n", warnStyle.Sprint("vole warning:"), path, err)
+			fmt.Fprintf(os.Stderr, "%s could not read %s: %v\n", warnStyle.Sprint(s.opts.CLIName+" warning:"), path, err)
 			return nil
 		}
 
