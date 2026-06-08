@@ -2,7 +2,24 @@
 	"name": "vole-clean",
 	"version": "0.1.0",
 	"description": "Find and remove unused image assets in React projects",
+	"keywords": [
+		"assets",
+		"cleanup",
+		"react",
+		"typescript",
+		"unused-files",
+		"cli"
+	],
+	"author": "devrapture",
 	"license": "MIT",
+	"homepage": "https://github.com/devrapture/Vole#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/devrapture/Vole.git"
+	},
+	"bugs": {
+		"url": "https://github.com/devrapture/Vole/issues"
+	},
 	"bin": {
 		"vole-clean": "./npm/vole-clean.js"
 	},
