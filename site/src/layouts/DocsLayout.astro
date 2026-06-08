@@ -19,7 +19,7 @@ const sidebarLinks = [
 <BaseLayout pageTitle={title} pageDescription={description}>
   <div class="max-w-6xl mx-auto px-6 py-16 md:py-20">
     <div class="flex gap-12">
-      <aside class="hidden md:block w-56 shrink-0">
+      <aside class="hidden md:block w-56 shrink-0 sticky top-24 self-start">
         <nav>
           <div class="mb-8">
             <a href="/docs" class="font-mono font-semibold text-sm text-text hover:text-accent transition-colors">
@@ -63,5 +63,29 @@ const sidebarLinks = [
   }
   .doc-content > :last-child {
     margin-bottom: 0 !important;
+  }
+
+  /* macOS traffic light dots on expressive-code terminal frames */
+  .expressive-code .frame.is-terminal .header {
+    position: relative;
+    padding-left: 52px !important;
+  }
+
+  .expressive-code .frame.is-terminal .header::before {
+    content: '' !important;
+    position: absolute !important;
+    pointer-events: none !important;
+    left: 16px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 40px !important;
+    height: 10px !important;
+    background:
+      radial-gradient(circle at 5px 5px, #ff5f57 5px, transparent 0),
+      radial-gradient(circle at 20px 5px, #febc2e 5px, transparent 0),
+      radial-gradient(circle at 35px 5px, #28c840 5px, transparent 0) !important;
+    opacity: 1 !important;
+    -webkit-mask: none !important;
+    mask: none !important;
   }
 </style>
